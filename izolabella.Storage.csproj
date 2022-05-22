@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Company>Izolabella</Company>
+    <Description>A simple data solution.</Description>
+    <AssemblyVersion>0.1.0</AssemblyVersion>
+    <PackageReleaseNotes>Initial push.</PackageReleaseNotes>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <PackageId>$(AssemblyName)</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Objects\Exceptions\" />
+  </ItemGroup>
+
+</Project>
