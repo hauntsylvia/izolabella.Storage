@@ -14,7 +14,7 @@ namespace izolabella.Storage.Objects.DataStores
         /// </summary>
         /// <param name="AppDirectoryName">AppData/<paramref name="AppDirectoryName"/></param>
         /// <param name="DataStoreName">AppData/<paramref name="AppDirectoryName"/>/<paramref name="DataStoreName"/></param>
-        public DataStore(string AppDirectoryName, string DataStoreName)
+        public DataStore(string AppDirectoryName, string DataStoreName, JsonSerializerSettings? Settings = null)
         {
             DirectoryInfo AppDirectory = new(Path.Combine(AppData.FullName, $".{AppDirectoryName}"));
             if (!AppDirectory.Exists)
@@ -27,12 +27,15 @@ namespace izolabella.Storage.Objects.DataStores
             {
                 this.Location.Create();
             }
+
+            this.Settings = Settings;
         }
 
         /// <summary>
         /// The location of the directory this <see cref="DataStore"/> is operating in.
         /// </summary>
         public DirectoryInfo Location { get; }
+        public JsonSerializerSettings? Settings { get; }
 
         private FileInfo GetFileInfoFromKey(object Key)
         {
@@ -63,7 +66,7 @@ namespace izolabella.Storage.Objects.DataStores
         {
             FileInfo FileInfo = this.GetFileInfoFromKey(Entity.Id);
             using StreamWriter Writer = new(FileInfo.FullName);
-            await Writer.WriteAsync(JsonConvert.SerializeObject(Entity, Formatting.Indented));
+            await Writer.WriteAsync(JsonConvert.SerializeObject(Entity, Formatting.Indented, this.Settings));
         }
 
         /// <summary>
@@ -80,7 +83,7 @@ namespace izolabella.Storage.Objects.DataStores
                 try
                 {
                     using StreamReader Reader = new(FileInfo.FullName);
-                    return JsonConvert.DeserializeObject<T>(await Reader.ReadToEndAsync());
+                    return JsonConvert.DeserializeObject<T>(await Reader.ReadToEndAsync(), this.Settings);
                 }
                 catch(Exception Ex)
                 {
@@ -107,7 +110,7 @@ namespace izolabella.Storage.Objects.DataStores
                 if (File.Exists)
                 {
                     using StreamReader Reader = new(File.FullName);
-                    T? Entity = JsonConvert.DeserializeObject<T>(await Reader.ReadToEndAsync());
+                    T? Entity = JsonConvert.DeserializeObject<T>(await Reader.ReadToEndAsync(), this.Settings);
                     if (Entity != null)
                     {
                         Entities.Add(Entity);
