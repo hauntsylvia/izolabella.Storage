@@ -34,7 +34,7 @@ namespace izolabella.Storage.Objects.DataStores
         /// <summary>
         /// The location of the directory this <see cref="DataStore"/> is operating in.
         /// </summary>
-        public DirectoryInfo Location { get; }
+        public DirectoryInfo Location { get; private set; }
         public JsonSerializerSettings? Settings { get; }
 
         private FileInfo GetFileInfoFromKey(object Key)
@@ -118,6 +118,15 @@ namespace izolabella.Storage.Objects.DataStores
                 }
             }
             return Entities;
+        }
+
+        public void MakeSubStore(string Sub)
+        {
+            this.Location = new(Path.Combine(this.Location.FullName, Sub));
+            if(!this.Location.Exists)
+            {
+                this.Location.Create();
+            }
         }
     }
 }
