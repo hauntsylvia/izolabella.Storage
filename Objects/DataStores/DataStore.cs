@@ -85,7 +85,7 @@ namespace izolabella.Storage.Objects.DataStores
                     using StreamReader Reader = new(FileInfo.FullName);
                     return JsonConvert.DeserializeObject<T>(await Reader.ReadToEndAsync(), this.Settings);
                 }
-                catch(Exception Ex)
+                catch (Exception Ex)
                 {
                     Console.WriteLine(Ex);
                     throw;
@@ -123,7 +123,7 @@ namespace izolabella.Storage.Objects.DataStores
         public void MakeSubStore(string Sub)
         {
             this.Location = new(Path.Combine(this.Location.FullName, Sub));
-            if(!this.Location.Exists)
+            if (!this.Location.Exists)
             {
                 this.Location.Create();
             }
