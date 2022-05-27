@@ -75,7 +75,7 @@ namespace izolabella.Storage.Objects.DataStores
         /// <typeparam name="T">The <see cref="IDataStoreEntity"/> derivation to return.</typeparam>
         /// <param name="Id">The id of the <see cref="IDataStoreEntity"/>.</param>
         /// <returns></returns>
-        public async Task<T?> ReadAsync<T>(ulong Id) where T : IDataStoreEntity
+        public async Task<T?> ReadAsync<T>(ulong Id) where T : class, IDataStoreEntity
         {
             FileInfo FileInfo = this.GetFileInfoFromKey(Id);
             if (FileInfo.Exists)
@@ -102,7 +102,7 @@ namespace izolabella.Storage.Objects.DataStores
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<List<T>> ReadAllAsync<T>() where T : IDataStoreEntity
+        public async Task<List<T>> ReadAllAsync<T>() where T : class, IDataStoreEntity
         {
             List<T> Entities = new();
             foreach (FileInfo File in this.Location.GetFiles())
