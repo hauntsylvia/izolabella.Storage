@@ -8,7 +8,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Company>Izolabella</Company>
     <Description>A simple data solution.</Description>
-    <AssemblyVersion>0.1.0</AssemblyVersion>
+    <Version>0.1.0</Version>
     <PackageReleaseNotes>Initial push.</PackageReleaseNotes>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <PackageId>$(AssemblyName)</PackageId>
