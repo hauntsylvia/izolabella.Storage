@@ -14,9 +14,10 @@ namespace izolabella.Storage.Objects.DataStores
         /// </summary>
         /// <param name="AppDirectoryName">AppData/<paramref name="AppDirectoryName"/></param>
         /// <param name="DataStoreName">AppData/<paramref name="AppDirectoryName"/>/<paramref name="DataStoreName"/></param>
-        public DataStore(string AppDirectoryName, string DataStoreName, JsonSerializerSettings? Settings = null)
+        public DataStore(string AppDirectoryName, string DataStoreName, JsonSerializerSettings? Settings = null, DirectoryInfo? Parent = null)
         {
-            DirectoryInfo AppDirectory = new(Path.Combine(AppData.FullName, $".{AppDirectoryName}"));
+            Parent ??= AppData;
+            DirectoryInfo AppDirectory = new(Path.Combine(Parent.FullName, $".{AppDirectoryName}"));
             if (!AppDirectory.Exists)
             {
                 AppDirectory.Create();
@@ -34,7 +35,7 @@ namespace izolabella.Storage.Objects.DataStores
         /// <summary>
         /// The location of the directory this <see cref="DataStore"/> is operating in.
         /// </summary>
-        public DirectoryInfo Location { get; private set; }
+        public DirectoryInfo Location { get; protected set; }
         public JsonSerializerSettings? Settings { get; }
 
         private FileInfo GetFileInfoFromKey(object Key)
@@ -47,7 +48,7 @@ namespace izolabella.Storage.Objects.DataStores
         /// </summary>
         /// <param name="Id">The id of the <see cref="IDataStoreEntity"/> to delete.</param>
         /// <returns></returns>
-        public Task DeleteAsync(ulong Id)
+        public virtual Task DeleteAsync(ulong Id)
         {
             FileInfo FileInfo = this.GetFileInfoFromKey(Id);
             if (FileInfo.Exists)
@@ -62,7 +63,7 @@ namespace izolabella.Storage.Objects.DataStores
         /// </summary>
         /// <param name="Entity">The <see cref="IDataStoreEntity"/> to save.</param>
         /// <returns></returns>
-        public async Task SaveAsync(IDataStoreEntity Entity)
+        public virtual async Task SaveAsync(IDataStoreEntity Entity)
         {
             FileInfo FileInfo = this.GetFileInfoFromKey(Entity.Id);
             using StreamWriter Writer = new(FileInfo.FullName);
@@ -75,7 +76,7 @@ namespace izolabella.Storage.Objects.DataStores
         /// <typeparam name="T">The <see cref="IDataStoreEntity"/> derivation to return.</typeparam>
         /// <param name="Id">The id of the <see cref="IDataStoreEntity"/>.</param>
         /// <returns></returns>
-        public async Task<T?> ReadAsync<T>(ulong Id) where T : class, IDataStoreEntity
+        public virtual async Task<T?> ReadAsync<T>(ulong Id) where T : class, IDataStoreEntity
         {
             FileInfo FileInfo = this.GetFileInfoFromKey(Id);
             if (FileInfo.Exists)
@@ -102,7 +103,7 @@ namespace izolabella.Storage.Objects.DataStores
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<List<T>> ReadAllAsync<T>() where T : class, IDataStoreEntity
+        public virtual async Task<List<T>> ReadAllAsync<T>() where T : class, IDataStoreEntity
         {
             List<T> Entities = new();
             foreach (FileInfo File in this.Location.GetFiles())

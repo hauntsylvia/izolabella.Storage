@@ -8,18 +8,20 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Company>Izolabella</Company>
     <Description>A simple data solution.</Description>
-    <Version>0.1.0</Version>
+    <Version>0.2.2</Version>
     <PackageReleaseNotes>Initial push.</PackageReleaseNotes>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <PackageId>$(AssemblyName)</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <Compile Remove="Objects\Exceptions\**" />
+    <EmbeddedResource Remove="Objects\Exceptions\**" />
+    <None Remove="Objects\Exceptions\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Objects\Exceptions\" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
 </Project>
