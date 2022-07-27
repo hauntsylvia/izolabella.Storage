@@ -32,6 +32,20 @@ namespace izolabella.Storage.Objects.DataStores
             this.Settings = Settings;
         }
 
+        private DataStore(DirectoryInfo Parent, string Name, JsonSerializerSettings? Settings = null)
+        {
+            this.Location = new(Path.Combine(Parent.FullName, Name));
+            if(!Parent.Exists)
+            {
+                Parent.Create();
+            }
+            if(!this.Location.Exists)
+            {
+                this.Location.Create();
+            }
+            this.Settings = Settings;
+        }
+
         /// <summary>
         /// The location of the directory this <see cref="DataStore"/> is operating in.
         /// </summary>
@@ -55,6 +69,16 @@ namespace izolabella.Storage.Objects.DataStores
             {
                 FileInfo.Delete();
             }
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Deletes all files and subdirectories from <see cref="Location"/>.
+        /// </summary>
+        /// <returns></returns>
+        public virtual Task DeleteAllAsync()
+        {
+            this.Location.Delete(true);
             return Task.CompletedTask;
         }
 
@@ -128,6 +152,11 @@ namespace izolabella.Storage.Objects.DataStores
             {
                 this.Location.Create();
             }
+        }
+
+        public DataStore CreateSubStore(string Sub)
+        {
+            return new DataStore(this.Location, Sub, this.Settings);
         }
     }
 }
