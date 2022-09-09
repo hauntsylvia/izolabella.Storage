@@ -1,10 +1,9 @@
-﻿namespace izolabella.Storage.Objects.Structures
+﻿namespace izolabella.Storage.Objects.Structures;
+
+public interface IDataStoreEntity
 {
-    public interface IDataStoreEntity
-    {
-        /// <summary>
-        /// The unique identifier of this <see cref="IDataStoreEntity"/>.
-        /// </summary>
-        ulong Id { get; }
-    }
+    /// <summary>
+    /// The unique identifier of this <see cref="IDataStoreEntity"/>.
+    /// </summary>
+    ulong Id { get; }
 }
